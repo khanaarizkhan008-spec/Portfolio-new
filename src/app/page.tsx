@@ -20,6 +20,8 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { GithubIcon, LinkedinIcon, TwitterIcon } from "@/components/SocialIcons";
 import IntroMarquee from "@/components/IntroMarquee";
 import ExperienceTimeline from "@/components/ExperienceTimeline";
+import ContactForm from "@/components/ContactForm";
+import { FileText } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -146,6 +148,14 @@ export default async function Home() {
               >
                 <span>Let's Talk</span>
                 <Sparkles size={16} />
+              </a>
+
+              <a
+                href={`mailto:${activeProfile.email}?subject=Resume%20Request%20-%20Mohammad%20Aariz%20Khan`}
+                className="px-5 sm:px-6 py-3.5 sm:py-4 rounded-2xl bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white font-mono font-bold text-xs sm:text-sm tracking-wider uppercase border border-white/10 transition-all duration-200 flex items-center justify-center gap-2"
+              >
+                <FileText size={15} />
+                <span>Resume / CV</span>
               </a>
 
               {/* Social Icons Bar */}
@@ -522,37 +532,7 @@ export default async function Home() {
               </h2>
             </div>
 
-            <div className="p-6 sm:p-10 md:p-14 rounded-3xl bg-zinc-900 border border-white/10 shadow-2xl space-y-6 sm:space-y-8 relative overflow-hidden">
-              <div className="space-y-3">
-                <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
-                  Have a project in mind or want to collaborate?
-                </h3>
-                <p className="text-zinc-400 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl">
-                  Whether you're looking to build an AI product, full-stack application, or high-converting platform, let's create something extraordinary.
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2">
-                <MagneticButton>
-                  <a
-                    href={`mailto:${activeProfile.email}`}
-                    className="px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white text-zinc-950 font-bold text-xs sm:text-base flex items-center justify-center gap-2 hover:bg-zinc-200 transition-all duration-200 block shadow-lg"
-                  >
-                    <Mail size={16} /> Send Direct Email
-                  </a>
-                </MagneticButton>
-                <MagneticButton>
-                  <a
-                    href={activeProfile.github || "#"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-semibold text-xs sm:text-base flex items-center justify-center gap-2 hover:bg-white/10 transition-all duration-200 block"
-                  >
-                    <GithubIcon size={16} /> View GitHub Repos
-                  </a>
-                </MagneticButton>
-              </div>
-            </div>
+            <ContactForm email={activeProfile.email || "contact@rizz.dev"} />
           </section>
         </ScrollReveal>
 

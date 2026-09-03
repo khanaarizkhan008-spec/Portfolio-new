@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { ArrowLeft, Mail, Sparkles } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { GithubIcon, LinkedinIcon, TwitterIcon } from "@/components/SocialIcons";
-import MagneticButton from "@/components/MagneticButton";
+import ContactForm from "@/components/ContactForm";
 
 export const metadata: Metadata = {
   title: "Contact & Collaboration — Mohammad Aariz Khan",
@@ -44,49 +44,15 @@ export default async function ContactPage() {
           </div>
         </div>
 
-        {/* Contact Info Cards Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
-          
-          {/* Main Direct Email Card */}
-          <div className="lg:col-span-8 p-6 sm:p-10 md:p-14 rounded-3xl bg-zinc-900 border border-white/10 shadow-2xl space-y-6 sm:space-y-8 relative overflow-hidden flex flex-col justify-between">
-            <div className="space-y-3 sm:space-y-4">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 border border-white/10 text-zinc-200 flex items-center justify-center">
-                <Sparkles size={24} />
-              </div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
-                Direct Email &amp; Inquiries
-              </h2>
-              <p className="text-zinc-400 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl">
-                I respond quickly to project requests, hackathon invitations, and engineering opportunities. Send a message directly to my inbox:
-              </p>
-            </div>
+        {/* Interactive Contact Form Component */}
+        <ContactForm email={email} />
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2 sm:pt-4">
-              <MagneticButton>
-                <a
-                  href={`mailto:${email}`}
-                  className="px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white text-zinc-950 font-bold text-xs sm:text-base flex items-center justify-center gap-2 hover:bg-zinc-200 transition-all duration-200 block shadow-lg text-center"
-                >
-                  <Mail size={16} /> Send Direct Email
-                </a>
-              </MagneticButton>
-              {profile?.github && (
-                <MagneticButton>
-                  <a
-                    href={profile.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-semibold text-xs sm:text-base flex items-center justify-center gap-2 hover:bg-white/10 transition-all duration-200 block text-center"
-                  >
-                    <GithubIcon size={16} /> GitHub Profile
-                  </a>
-                </MagneticButton>
-              )}
-            </div>
-          </div>
-
-          {/* Social Profiles Column */}
-          <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3 sm:gap-4">
+        {/* Social Profiles Grid */}
+        <div className="space-y-6 pt-6 border-t border-white/10">
+          <h3 className="text-2xl sm:text-3xl font-bold text-white uppercase tracking-tight">
+            Connect &amp; Follow Online
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {profile?.linkedin && (
               <a
                 href={profile.linkedin}
@@ -138,7 +104,6 @@ export default async function ContactPage() {
               </a>
             )}
           </div>
-
         </div>
 
         {/* Footer */}
