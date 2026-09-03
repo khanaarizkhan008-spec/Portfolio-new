@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id         String   @id @default(cuid())
+  title      String
+  slug       String   @unique
+  excerpt    String
+  content    String   // markdown
+  coverImage String?
+  published  Boolean  @default(false)
+  featured   Boolean  @default(false) // Starred achievement flag
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  tags        String   // comma-separated or JSON
+  coverImage  String?
+  liveUrl     String?
+  githubUrl   String?
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+}
+
+model Experience {
+  id          String    @id @default(cuid())
+  org         String    // organization / event / institution name
+  role        String    // role or context (e.g. "Hackathon Participant")
+  description String
+  startDate   DateTime
+  endDate     DateTime?
+  ongoing     Boolean   @default(false)
+  url         String?
+  order       Int       @default(0)
+}
+
+model Certification {
+  id            String   @id @default(cuid())
+  title         String
+  issuer        String
+  issueDate     DateTime
+  credentialUrl String?
+  order         Int      @default(0)
+}
+
+model Skill {
+  id       String @id @default(cuid())
+  name     String
+  category String? // e.g. "Language", "Framework", "Tool"
+  order    Int    @default(0)
+}
+
+model Profile {
+  id                String  @id @default(cuid())
+  name              String
+  role              String
+  bio               String
+  profileImage      String?
+  github            String?
+  linkedin          String?
+  twitter           String?
+  email             String?
+  yearsBuilding     Int     @default(0)
+  projectsShipped   Int     @default(0)
+  hackathonsEntered Int     @default(0)
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model Admin {
+  id       String @id @default(cuid())
+  email    String @unique
+  password String // hashed with bcrypt
+}
