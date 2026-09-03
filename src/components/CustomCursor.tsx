@@ -4,11 +4,25 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 export default function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
+    // Only enable for desktop devices with fine pointer
+    const mediaQuery = window.matchMedia("(pointer: fine) and (min-width: 1024px)");
+    setIsDesktop(mediaQuery.matches);
+
+    const handleMediaChange = (e: MediaQueryListEvent) => {
+      setIsDesktop(e.matches);
+      if (!e.matches) setIsVisible(false);
+    };
+
+    mediaQuery.addEventListener("change", handleMediaChange);
+
+    if (!mediaQuery.matches) return;
+
     const updateMousePosition = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
       if (!isVisible) setIsVisible(true);
@@ -24,80 +38,68 @@ export default function CustomCursor() {
     document.addEventListener("mouseleave", handleMouseLeave);
     document.addEventListener("mouseenter", handleMouseEnter);
 
-    // Add listeners to all interactive elements
-    const interactiveElements = document.querySelectorAll("a, button, input, textarea, select, [role='button']");
-    interactiveElements.forEach((el) => {
-      el.addEventListener("mouseenter", handleHoverStart);
-      el.addEventListener("mouseleave", handleHoverEnd);
-    });
-
-    // Observer to attach listeners to dynamically added elements
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.addedNodes.length) {
-          const newInteractives = document.querySelectorAll("a, button, input, textarea, select, [role='button']");
-          newInteractives.forEach((el) => {
-            el.removeEventListener("mouseenter", handleHoverStart);
-            el.removeEventListener("mouseleave", handleHoverEnd);
-            el.addEventListener("mouseenter", handleHoverStart);
-            el.addEventListener("mouseleave", handleHoverEnd);
-          });
-        }
+    // Add listeners to interactive elements
+    const attachHoverListeners = () => {
+      const interactiveElements = document.querySelectorAll("a, button, input, textarea, select, [role='button']");
+      interactiveElements.forEach((el) => {
+        el.addEventListener("mouseenter", handleHoverStart);
+        el.addEventListener("mouseleave", handleHoverEnd);
       });
+    };
+
+    attachHoverListeners();
+
+    const observer = new MutationObserver(() => {
+      attachHoverListeners();
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
+      mediaQuery.removeEventListener("change", handleMediaChange);
       window.removeEventListener("mousemove", updateMousePosition);
       document.removeEventListener("mouseleave", handleMouseLeave);
       document.removeEventListener("mouseenter", handleMouseEnter);
-      
-      interactiveElements.forEach((el) => {
-        el.removeEventListener("mouseenter", handleHoverStart);
-        el.removeEventListener("mouseleave", handleHoverEnd);
-      });
       observer.disconnect();
     };
   }, [isVisible]);
 
-  // Hide cursor on touch devices
-  if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
+  if (!isDesktop || !isVisible) {
     return null;
   }
 
   return (
-    <>
+    <div className="hidden lg:block pointer-events-none">
       <motion.div
-        className="fixed top-0 left-0 w-4 h-4 bg-amber-500 rounded-full pointer-events-none z-[9999] mix-blend-difference"
+        className="fixed top-0 left-0 w-3.5 h-3.5 bg-white rounded-full pointer-events-none z-[9999] mix-blend-difference"
         animate={{
-          x: mousePosition.x - 8,
-          y: mousePosition.y - 8,
+          x: mousePosition.x - 7,
+          y: mousePosition.y - 7,
           scale: isHovering ? 2.5 : 1,
           opacity: isVisible ? 1 : 0,
         }}
         transition={{
           type: "spring",
-          stiffness: 700,
-          damping: 40,
-          mass: 0.5,
+          stiffness: 800,
+          damping: 35,
+          mass: 0.3,
         }}
       />
       <motion.div
-        className="fixed top-0 left-0 w-10 h-10 border border-amber-500/30 rounded-full pointer-events-none z-[9998]"
+        className="fixed top-0 left-0 w-9 h-9 border border-white/30 rounded-full pointer-events-none z-[9998]"
         animate={{
-          x: mousePosition.x - 20,
-          y: mousePosition.y - 20,
-          scale: isHovering ? 1.5 : 1,
+          x: mousePosition.x - 18,
+          y: mousePosition.y - 18,
+          scale: isHovering ? 1.6 : 1,
           opacity: isVisible ? 1 : 0,
         }}
         transition={{
           type: "spring",
-          stiffness: 250,
-          damping: 30,
-          mass: 1,
+          stiffness: 300,
+          damping: 25,
+          mass: 0.8,
         }}
       />
-    </>
+    </div>
   );
 }
