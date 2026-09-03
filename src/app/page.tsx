@@ -1,82 +1,78 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { 
-  Code2, 
-  BriefcaseBusiness, 
-  Mail, 
-  ExternalLink, 
-  ArrowUpRight, 
-  ArrowRight,
-  ArrowDown,
-  Flame, 
-  Calendar,
-  Sparkles,
+  ArrowDown, 
+  ArrowRight, 
+  MapPin, 
+  Sparkles, 
+  Calendar, 
+  Star, 
+  Cpu, 
+  Award,
   Layers,
-  Cpu,
-  Globe,
-  MapPin,
-  FileDown,
-  Award, 
-  Star
+  CheckCircle2,
+  Terminal,
+  Mail
 } from "lucide-react";
-import { GithubIcon, LinkedinIcon, TwitterIcon, DribbbleIcon } from "@/components/SocialIcons";
-import IntroMarquee from "@/components/IntroMarquee";
-import ScrollReveal from "@/components/ScrollReveal";
+import { StickyCard002 } from "@/components/StickyCardProjects";
 import MagneticButton from "@/components/MagneticButton";
-import { StickyCard002, ProjectCardData } from "@/components/StickyCardProjects";
+import ScrollReveal from "@/components/ScrollReveal";
+import { GithubIcon, LinkedinIcon, TwitterIcon } from "@/components/SocialIcons";
+import IntroMarquee from "@/components/IntroMarquee";
 
-export default async function HomePage() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
   const profile = await prisma.profile.findUnique({
     where: { id: "profile-1" },
   });
 
-  const featuredProjects = await prisma.project.findMany({
+  const projects = await prisma.project.findMany({
     orderBy: [{ featured: "desc" }, { order: "asc" }],
-    take: 4,
+    take: 6,
   });
 
   const experiences = await prisma.experience.findMany({
     orderBy: { order: "asc" },
-    take: 3,
-  });
-
-  const skills = await prisma.skill.findMany({
-    orderBy: { order: "asc" },
-  });
-
-  const recentPosts = await prisma.post.findMany({
-    where: { published: true },
-    orderBy: { createdAt: "desc" },
-    take: 2,
-  });
-
-  const starredAchievements = await prisma.post.findMany({
-    where: { published: true, featured: true },
-    orderBy: { createdAt: "desc" },
   });
 
   const certifications = await prisma.certification.findMany({
     orderBy: { order: "asc" },
   });
 
-  const projectCards: ProjectCardData[] = featuredProjects.map((p) => ({
+  const skills = await prisma.skill.findMany({
+    orderBy: { order: "asc" },
+  });
+
+  const starredAchievements = await prisma.post.findMany({
+    where: { published: true, featured: true },
+    orderBy: { createdAt: "desc" },
+    take: 3,
+  });
+
+  const recentPosts = await prisma.post.findMany({
+    where: { published: true },
+    orderBy: { createdAt: "desc" },
+    take: 3,
+  });
+
+  // Transform projects for StickyCard component
+  const projectCards = projects.map((p) => ({
     id: p.id,
-    image: p.coverImage || "",
     title: p.title,
     description: p.description,
     tags: p.tags,
+    image: p.coverImage || "/placeholder-project.jpg",
     liveUrl: p.liveUrl || undefined,
     githubUrl: p.githubUrl || undefined,
   }));
 
-  // Fallback profile if database is empty
   const activeProfile = profile || {
-    id: "profile-1",
     name: "Mohammad Aariz Khan",
     role: "Full-Stack Software Engineer & AI Builder",
-    bio: "Passionate about creating intuitive and engaging user experiences. Specialize in transforming ideas into beautifully crafted products.",
+    bio: "Obsessed with creating high-performance software, autonomous AI systems, and elegant digital products. 3+ years building and shipping across modern stacks.",
     profileImage: "/avatar.jpg",
-    github: "https://github.com/rizz-khan",
+    github: "https://github.com/khanaarizkhan008-spec",
     linkedin: "https://linkedin.com/in/rizz-khan",
     twitter: "https://x.com/rizz-khan",
     email: "contact@rizz.dev",
@@ -88,56 +84,56 @@ export default async function HomePage() {
   return (
     <>
       <IntroMarquee />
-      <main className="min-h-screen bg-[#09090b] text-zinc-100 pt-24 pb-28 selection:bg-white/20 selection:text-white">
-        <div className="w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 space-y-36">
+      <main className="min-h-screen bg-[#09090b] text-zinc-100 pt-20 sm:pt-28 pb-24 selection:bg-white/20 selection:text-white overflow-x-hidden">
+        <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-16 space-y-24 sm:space-y-32 lg:space-y-40">
         
         {/* ======================================================= */}
         {/* 1. HERO SECTION (EXPANSIVE FULL SCREEN VIEWPORT) */}
         {/* ======================================================= */}
         <ScrollReveal>
-          <section id="hero" className="min-h-[80vh] flex flex-col justify-center space-y-10 pt-4">
+          <section id="hero" className="min-h-[75vh] sm:min-h-[82vh] flex flex-col justify-center space-y-8 sm:space-y-10 pt-2 sm:pt-4">
             
             {/* Live Availability Badge & Location */}
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between gap-3 sm:gap-4">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-mono font-semibold">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
                 </span>
-                <span>AVAILABLE FOR HIRE &amp; FREELANCE</span>
+                <span className="truncate">AVAILABLE FOR HIRE &amp; FREELANCE</span>
               </div>
 
-              <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-mono text-zinc-400 bg-zinc-900/90 px-4 py-2 rounded-xl border border-white/10">
-                <MapPin size={15} className="text-zinc-400" />
-                <span>India • Available Remote Worldwide</span>
+              <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-mono text-zinc-400 bg-zinc-900/90 px-3.5 py-1.5 rounded-xl border border-white/10">
+                <MapPin size={14} className="text-zinc-400 shrink-0" />
+                <span className="truncate">India • Available Worldwide</span>
               </div>
             </div>
 
-            {/* Massive Two-Tone Typography (Full-Width Immersion) */}
-            <div className="space-y-1">
-              <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[11.5rem] font-black tracking-tight text-white uppercase leading-[0.88]">
+            {/* Massive Responsive Two-Tone Typography */}
+            <div className="space-y-0.5 sm:space-y-1">
+              <h1 className="text-4xl xs:text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[11.5rem] font-black tracking-tight text-white uppercase leading-[0.9] break-words">
                 MOHAMMAD
               </h1>
-              <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[11.5rem] font-black tracking-tight text-zinc-700 uppercase leading-[0.88] select-none">
+              <h1 className="text-4xl xs:text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[11.5rem] font-black tracking-tight text-zinc-700 uppercase leading-[0.9] select-none break-words">
                 AARIZ KHAN
               </h1>
             </div>
 
             {/* Role & Expanded Bio */}
-            <div className="space-y-4 max-w-5xl">
-              <p className="text-sm sm:text-lg font-mono uppercase text-zinc-400 tracking-wider">
+            <div className="space-y-3 sm:space-y-4 max-w-5xl">
+              <p className="text-xs sm:text-base md:text-lg font-mono uppercase text-zinc-400 tracking-wider">
                 {activeProfile.role}
               </p>
-              <p className="text-xl sm:text-2xl md:text-3xl text-zinc-300 font-normal leading-relaxed">
+              <p className="text-base sm:text-xl md:text-2xl lg:text-3xl text-zinc-300 font-normal leading-relaxed">
                 {activeProfile.bio || "Passionate about creating intuitive and engaging user experiences. Specialize in transforming ideas into beautifully crafted products."}
               </p>
             </div>
 
             {/* Action Buttons & Social Links Row */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4 pt-2">
               <a
                 href="#projects"
-                className="px-8 py-4 rounded-2xl bg-white hover:bg-zinc-200 text-zinc-950 font-bold text-xs sm:text-sm tracking-wider uppercase transition-all duration-200 flex items-center gap-2 shadow-xl"
+                className="px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white hover:bg-zinc-200 text-zinc-950 font-bold text-xs sm:text-sm tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 shadow-xl"
               >
                 <span>Explore Featured Work</span>
                 <ArrowDown size={16} />
@@ -145,14 +141,14 @@ export default async function HomePage() {
 
               <a
                 href="#contact"
-                className="px-8 py-4 rounded-2xl bg-zinc-900 hover:bg-zinc-800 text-zinc-200 hover:text-white font-semibold text-xs sm:text-sm tracking-wider uppercase border border-white/15 transition-all duration-200 flex items-center gap-2"
+                className="px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-zinc-900 hover:bg-zinc-800 text-zinc-200 hover:text-white font-semibold text-xs sm:text-sm tracking-wider uppercase border border-white/15 transition-all duration-200 flex items-center justify-center gap-2"
               >
                 <span>Let's Talk</span>
                 <Sparkles size={16} />
               </a>
 
               {/* Social Icons Bar */}
-              <div className="flex items-center gap-3 sm:ml-auto">
+              <div className="flex items-center justify-center sm:justify-start gap-2.5 sm:gap-3 sm:ml-auto pt-2 sm:pt-0">
                 {activeProfile.github && (
                   <MagneticButton>
                     <a
@@ -160,9 +156,9 @@ export default async function HomePage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="GitHub Profile"
-                      className="p-3.5 rounded-2xl bg-zinc-900 text-zinc-300 hover:bg-white hover:text-zinc-950 border border-white/10 transition-all block"
+                      className="p-3 sm:p-3.5 rounded-2xl bg-zinc-900 text-zinc-300 hover:bg-white hover:text-zinc-950 border border-white/10 transition-all block"
                     >
-                      <GithubIcon size={20} />
+                      <GithubIcon size={18} />
                     </a>
                   </MagneticButton>
                 )}
@@ -173,9 +169,9 @@ export default async function HomePage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="LinkedIn Profile"
-                      className="p-3.5 rounded-2xl bg-zinc-900 text-zinc-300 hover:bg-white hover:text-zinc-950 border border-white/10 transition-all block"
+                      className="p-3 sm:p-3.5 rounded-2xl bg-zinc-900 text-zinc-300 hover:bg-white hover:text-zinc-950 border border-white/10 transition-all block"
                     >
-                      <LinkedinIcon size={20} />
+                      <LinkedinIcon size={18} />
                     </a>
                   </MagneticButton>
                 )}
@@ -186,9 +182,9 @@ export default async function HomePage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="Twitter Profile"
-                      className="p-3.5 rounded-2xl bg-zinc-900 text-zinc-300 hover:bg-white hover:text-zinc-950 border border-white/10 transition-all block"
+                      className="p-3 sm:p-3.5 rounded-2xl bg-zinc-900 text-zinc-300 hover:bg-white hover:text-zinc-950 border border-white/10 transition-all block"
                     >
-                      <TwitterIcon size={20} />
+                      <TwitterIcon size={18} />
                     </a>
                   </MagneticButton>
                 )}
@@ -197,38 +193,38 @@ export default async function HomePage() {
                     <a
                       href={`mailto:${activeProfile.email}`}
                       aria-label="Send Email"
-                      className="p-3.5 rounded-2xl bg-zinc-900 text-zinc-300 hover:bg-white hover:text-zinc-950 border border-white/10 transition-all block"
+                      className="p-3 sm:p-3.5 rounded-2xl bg-zinc-900 text-zinc-300 hover:bg-white hover:text-zinc-950 border border-white/10 transition-all block"
                     >
-                      <Mail size={20} />
+                      <Mail size={18} />
                     </a>
                   </MagneticButton>
                 )}
               </div>
             </div>
 
-            {/* Stats Row (Grand Large Counters) */}
-            <div className="grid grid-cols-3 gap-6 pt-10 border-t border-white/10">
-              <div className="space-y-1">
-                <p className="text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tight">
+            {/* Stats Row (Horizontal Counters Across All Viewports) */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-6 pt-6 sm:pt-10 border-t border-white/10">
+              <div className="space-y-0.5 sm:space-y-1">
+                <p className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight">
                   +{activeProfile.yearsBuilding}
                 </p>
-                <p className="text-xs sm:text-sm font-semibold tracking-wider text-zinc-500 uppercase font-mono">
+                <p className="text-[9px] xs:text-[11px] sm:text-sm font-semibold tracking-wider text-zinc-500 uppercase font-mono truncate">
                   YEARS BUILDING
                 </p>
               </div>
-              <div className="space-y-1">
-                <p className="text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tight">
+              <div className="space-y-0.5 sm:space-y-1">
+                <p className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight">
                   +{activeProfile.projectsShipped}
                 </p>
-                <p className="text-xs sm:text-sm font-semibold tracking-wider text-zinc-500 uppercase font-mono">
+                <p className="text-[9px] xs:text-[11px] sm:text-sm font-semibold tracking-wider text-zinc-500 uppercase font-mono truncate">
                   PROJECTS SHIPPED
                 </p>
               </div>
-              <div className="space-y-1">
-                <p className="text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tight">
+              <div className="space-y-0.5 sm:space-y-1">
+                <p className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight">
                   +{activeProfile.hackathonsEntered > 0 ? activeProfile.hackathonsEntered : 10}
                 </p>
-                <p className="text-xs sm:text-sm font-semibold tracking-wider text-zinc-500 uppercase font-mono">
+                <p className="text-[9px] xs:text-[11px] sm:text-sm font-semibold tracking-wider text-zinc-500 uppercase font-mono truncate">
                   HACKATHONS &amp; AWARDS
                 </p>
               </div>
@@ -242,16 +238,16 @@ export default async function HomePage() {
         {/* ======================================================= */}
         {starredAchievements.length > 0 && (
           <ScrollReveal delay={0.1}>
-            <section id="achievements" className="space-y-10 scroll-mt-28">
+            <section id="achievements" className="space-y-8 sm:space-y-10 scroll-mt-24">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/15 text-zinc-300 text-xs font-mono font-bold uppercase tracking-wider mb-2">
                     <Star size={13} className="fill-white text-white" /> Key Highlight
                   </div>
-                  <h2 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white uppercase leading-none">
+                  <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white uppercase leading-none break-words">
                     KEY
                   </h2>
-                  <h2 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-zinc-700 uppercase leading-none select-none">
+                  <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-zinc-700 uppercase leading-none select-none break-words">
                     ACHIEVEMENTS
                   </h2>
                 </div>
@@ -262,11 +258,11 @@ export default async function HomePage() {
                   <Link
                     key={achievement.id}
                     href={`/blog/${achievement.slug}`}
-                    className="group block p-8 sm:p-10 rounded-3xl bg-zinc-900/60 border border-white/10 hover:border-white/30 transition-all duration-300 shadow-2xl relative overflow-hidden"
+                    className="group block p-6 sm:p-8 md:p-10 rounded-3xl bg-zinc-900/60 border border-white/10 hover:border-white/30 transition-all duration-300 shadow-2xl relative overflow-hidden"
                   >
-                    <div className="flex flex-col md:flex-row gap-8 items-start md:items-center justify-between">
+                    <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start md:items-center justify-between">
                       {achievement.coverImage && (
-                        <div className="w-full md:w-80 h-56 rounded-2xl overflow-hidden bg-zinc-800 shrink-0 border border-white/10 relative">
+                        <div className="w-full md:w-80 h-48 sm:h-56 rounded-2xl overflow-hidden bg-zinc-800 shrink-0 border border-white/10 relative">
                           <img
                             src={achievement.coverImage}
                             alt={achievement.title}
@@ -278,7 +274,7 @@ export default async function HomePage() {
                         </div>
                       )}
 
-                      <div className="space-y-4 flex-1 min-w-0">
+                      <div className="space-y-3 sm:space-y-4 flex-1 min-w-0">
                         <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-zinc-400 uppercase tracking-wider font-mono">
                           <Calendar size={14} />
                           {new Date(achievement.createdAt).toLocaleDateString("en-US", {
@@ -288,16 +284,16 @@ export default async function HomePage() {
                           })}
                         </div>
 
-                        <h3 className="text-2xl sm:text-4xl font-black text-white group-hover:text-zinc-300 transition-colors">
+                        <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white group-hover:text-zinc-300 transition-colors">
                           {achievement.title}
                         </h3>
 
-                        <p className="text-sm sm:text-lg text-zinc-400 leading-relaxed line-clamp-2">
+                        <p className="text-sm sm:text-base md:text-lg text-zinc-400 leading-relaxed line-clamp-2">
                           {achievement.excerpt}
                         </p>
 
-                        <div className="flex items-center gap-2 text-sm sm:text-base font-bold text-white pt-1 group-hover:translate-x-1 transition-transform">
-                          Read Achievement Breakdown <ArrowRight size={18} />
+                        <div className="flex items-center gap-2 text-xs sm:text-sm md:text-base font-bold text-white pt-1 group-hover:translate-x-1 transition-transform">
+                          Read Achievement Breakdown <ArrowRight size={16} />
                         </div>
                       </div>
                     </div>
@@ -312,12 +308,12 @@ export default async function HomePage() {
         {/* 3. RECENT PROJECTS SECTION */}
         {/* ======================================================= */}
         <ScrollReveal delay={0.1}>
-          <section id="projects" className="space-y-10 scroll-mt-28">
+          <section id="projects" className="space-y-8 sm:space-y-10 scroll-mt-24">
             <div className="space-y-1">
-              <h2 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white uppercase leading-none">
+              <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white uppercase leading-none break-words">
                 RECENT
               </h2>
-              <h2 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-zinc-700 uppercase leading-none select-none">
+              <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-zinc-700 uppercase leading-none select-none break-words">
                 PROJECTS
               </h2>
             </div>
@@ -326,13 +322,13 @@ export default async function HomePage() {
               <StickyCard002 cards={projectCards} />
             </div>
 
-            <div className="pt-4">
+            <div className="pt-2 sm:pt-4">
               <Link
                 href="/projects"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white/5 hover:bg-white hover:text-zinc-950 text-zinc-300 font-semibold text-sm sm:text-base transition-all duration-200 border border-white/10 hover:border-white group"
+                className="inline-flex items-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white/5 hover:bg-white hover:text-zinc-950 text-zinc-300 font-semibold text-xs sm:text-base transition-all duration-200 border border-white/10 hover:border-white group"
               >
                 View All Projects 
-                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </section>
@@ -342,12 +338,12 @@ export default async function HomePage() {
         {/* 4. WORK EXPERIENCE SECTION */}
         {/* ======================================================= */}
         <ScrollReveal delay={0.1}>
-          <section id="experience" className="space-y-10 scroll-mt-28">
+          <section id="experience" className="space-y-8 sm:space-y-10 scroll-mt-24">
             <div className="space-y-1">
-              <h2 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white uppercase leading-none">
+              <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white uppercase leading-none break-words">
                 WORK
               </h2>
-              <h2 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-zinc-700 uppercase leading-none select-none">
+              <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-zinc-700 uppercase leading-none select-none break-words">
                 EXPERIENCE
               </h2>
             </div>
@@ -356,15 +352,15 @@ export default async function HomePage() {
               {experiences.map((exp) => (
                 <div
                   key={exp.id}
-                  className="p-8 sm:p-9 rounded-3xl bg-zinc-900/60 border border-white/10 hover:border-white/20 transition-all duration-300 space-y-4"
+                  className="p-6 sm:p-8 md:p-9 rounded-3xl bg-zinc-900/60 border border-white/10 hover:border-white/20 transition-all duration-300 space-y-3 sm:space-y-4"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3">
                     <div>
-                      <h3 className="text-2xl font-bold text-white">{exp.role}</h3>
-                      <p className="text-base font-semibold text-zinc-400 font-mono">{exp.org}</p>
+                      <h3 className="text-xl sm:text-2xl font-bold text-white">{exp.role}</h3>
+                      <p className="text-sm sm:text-base font-semibold text-zinc-400 font-mono">{exp.org}</p>
                     </div>
-                    <div className="flex items-center gap-1.5 text-xs sm:text-sm text-zinc-400 font-medium bg-white/5 px-4 py-1.5 rounded-full w-fit border border-white/10 font-mono">
-                      <Calendar size={14} />
+                    <div className="flex items-center gap-1.5 text-xs sm:text-sm text-zinc-400 font-medium bg-white/5 px-3 sm:px-4 py-1.5 rounded-full w-fit border border-white/10 font-mono">
+                      <Calendar size={13} />
                       {new Date(exp.startDate).toLocaleDateString("en-US", {
                         month: "short",
                         year: "numeric",
@@ -380,7 +376,7 @@ export default async function HomePage() {
                         : ""}
                     </div>
                   </div>
-                  <p className="text-base text-zinc-400 leading-relaxed">
+                  <p className="text-sm sm:text-base text-zinc-400 leading-relaxed">
                     {exp.description}
                   </p>
                 </div>
@@ -389,25 +385,25 @@ export default async function HomePage() {
 
             {/* Certifications Sub-section */}
             {certifications.length > 0 && (
-              <div className="space-y-6 pt-8 border-t border-white/10">
-                <h3 className="text-3xl font-bold text-white uppercase tracking-tight">
+              <div className="space-y-6 pt-6 sm:pt-8 border-t border-white/10">
+                <h3 className="text-2xl sm:text-3xl font-bold text-white uppercase tracking-tight">
                   Certifications &amp; Accreditations
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {certifications.map((cert) => (
                     <div
                       key={cert.id}
-                      className="p-6 rounded-2xl bg-zinc-900/60 border border-white/10 hover:border-white/30 hover:bg-zinc-900 transition-all duration-200 flex items-start gap-4 group"
+                      className="p-5 sm:p-6 rounded-2xl bg-zinc-900/60 border border-white/10 hover:border-white/30 hover:bg-zinc-900 transition-all duration-200 flex items-start gap-3.5 sm:gap-4 group"
                     >
-                      <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 text-zinc-200 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                        <Award size={22} />
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 text-zinc-200 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                        <Award size={20} />
                       </div>
                       <div className="space-y-1 min-w-0 flex-1">
-                        <p className="text-base font-bold text-white group-hover:text-zinc-200 transition-colors truncate">
+                        <p className="text-sm sm:text-base font-bold text-white group-hover:text-zinc-200 transition-colors truncate">
                           {cert.title}
                         </p>
-                        <p className="text-sm font-semibold text-zinc-400 font-mono">{cert.issuer}</p>
-                        <p className="text-xs text-zinc-500 font-mono">
+                        <p className="text-xs sm:text-sm font-semibold text-zinc-400 font-mono">{cert.issuer}</p>
+                        <p className="text-[11px] sm:text-xs text-zinc-500 font-mono">
                           Issued {new Date(cert.issueDate).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
                         </p>
                       </div>
@@ -420,44 +416,44 @@ export default async function HomePage() {
             <div className="pt-2">
               <Link
                 href="/experience"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white/5 hover:bg-white hover:text-zinc-950 text-zinc-300 font-semibold text-sm sm:text-base transition-all duration-200 border border-white/10 hover:border-white group"
+                className="inline-flex items-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white/5 hover:bg-white hover:text-zinc-950 text-zinc-300 font-semibold text-xs sm:text-base transition-all duration-200 border border-white/10 hover:border-white group"
               >
                 View Full Timeline &amp; Certifications 
-                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </section>
         </ScrollReveal>
 
         {/* ======================================================= */}
-        {/* 5. SKILLS & TOOLS SECTION (LARGE RESPONSIVE GRID) */}
+        {/* 5. SKILLS & TOOLS SECTION (RESPONSIVE GRID) */}
         {/* ======================================================= */}
         <ScrollReveal delay={0.1}>
-          <section id="skills" className="space-y-10 scroll-mt-28">
+          <section id="skills" className="space-y-8 sm:space-y-10 scroll-mt-24">
             <div className="space-y-1">
-              <h2 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white uppercase leading-none">
+              <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white uppercase leading-none break-words">
                 PREMIUM
               </h2>
-              <h2 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-zinc-700 uppercase leading-none select-none">
+              <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-zinc-700 uppercase leading-none select-none break-words">
                 SKILLS &amp; TOOLS
               </h2>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
               {skills.length > 0 ? (
                 skills.map((skill) => (
                   <div
                     key={skill.id}
-                    className="p-5 rounded-2xl bg-zinc-900/60 border border-white/10 hover:border-white/30 hover:bg-zinc-900 transition-all duration-200 flex items-center gap-3.5 group"
+                    className="p-4 sm:p-5 rounded-2xl bg-zinc-900/60 border border-white/10 hover:border-white/30 hover:bg-zinc-900 transition-all duration-200 flex items-center gap-3 group"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-white/5 text-zinc-300 flex items-center justify-center group-hover:scale-110 transition-transform border border-white/10 shrink-0">
-                      <Cpu size={20} />
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/5 text-zinc-300 flex items-center justify-center group-hover:scale-110 transition-transform border border-white/10 shrink-0">
+                      <Cpu size={18} />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm sm:text-base font-bold text-white group-hover:text-zinc-200 transition-colors truncate">
+                      <p className="text-xs sm:text-sm font-bold text-white group-hover:text-zinc-200 transition-colors truncate">
                         {skill.name}
                       </p>
-                      <p className="text-xs text-zinc-500 font-mono truncate">
+                      <p className="text-[10px] sm:text-xs text-zinc-500 font-mono truncate">
                         {skill.category || "Technology"}
                       </p>
                     </div>
@@ -467,16 +463,16 @@ export default async function HomePage() {
                 ["Next.js", "React", "TypeScript", "Python", "TailwindCSS", "Prisma", "PostgreSQL", "Docker", "FastAPI", "Node.js"].map((name) => (
                   <div
                     key={name}
-                    className="p-5 rounded-2xl bg-zinc-900/60 border border-white/10 hover:border-white/30 hover:bg-zinc-900 transition-all duration-200 flex items-center gap-3.5 group"
+                    className="p-4 sm:p-5 rounded-2xl bg-zinc-900/60 border border-white/10 hover:border-white/30 hover:bg-zinc-900 transition-all duration-200 flex items-center gap-3 group"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-white/5 text-zinc-300 flex items-center justify-center group-hover:scale-110 transition-transform border border-white/10 shrink-0">
-                      <Cpu size={20} />
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/5 text-zinc-300 flex items-center justify-center group-hover:scale-110 transition-transform border border-white/10 shrink-0">
+                      <Cpu size={18} />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm sm:text-base font-bold text-white group-hover:text-zinc-200 transition-colors truncate">
+                      <p className="text-xs sm:text-sm font-bold text-white group-hover:text-zinc-200 transition-colors truncate">
                         {name}
                       </p>
-                      <p className="text-xs text-zinc-500 font-mono">Core Stack</p>
+                      <p className="text-[10px] sm:text-xs text-zinc-500 font-mono">Core Stack</p>
                     </div>
                   </div>
                 ))
@@ -490,12 +486,12 @@ export default async function HomePage() {
         {/* ======================================================= */}
         {recentPosts.length > 0 && (
           <ScrollReveal delay={0.1}>
-            <section id="articles" className="space-y-10 scroll-mt-28">
+            <section id="articles" className="space-y-8 sm:space-y-10 scroll-mt-24">
               <div className="space-y-1">
-                <h2 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white uppercase leading-none">
+                <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white uppercase leading-none break-words">
                   LATEST
                 </h2>
-                <h2 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-zinc-700 uppercase leading-none select-none">
+                <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-zinc-700 uppercase leading-none select-none break-words">
                   ARTICLES
                 </h2>
               </div>
@@ -505,26 +501,26 @@ export default async function HomePage() {
                   <Link
                     key={post.id}
                     href={`/blog/${post.slug}`}
-                    className="group block p-8 sm:p-9 rounded-3xl bg-zinc-900/60 border border-white/10 hover:border-white/30 hover:bg-zinc-900 transition-all duration-300"
+                    className="group block p-6 sm:p-8 md:p-9 rounded-3xl bg-zinc-900/60 border border-white/10 hover:border-white/30 hover:bg-zinc-900 transition-all duration-300"
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
-                      <div className="space-y-3 flex-1">
-                        <p className="text-xs sm:text-sm font-semibold text-zinc-500 uppercase tracking-wider font-mono">
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 sm:gap-6">
+                      <div className="space-y-2.5 sm:space-y-3 flex-1">
+                        <p className="text-[11px] sm:text-xs font-semibold text-zinc-500 uppercase tracking-wider font-mono">
                           {new Date(post.createdAt).toLocaleDateString("en-US", {
                             month: "short",
                             day: "numeric",
                             year: "numeric",
                           })}
                         </p>
-                        <h3 className="text-2xl sm:text-3xl font-bold text-white group-hover:text-zinc-300 transition-colors">
+                        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white group-hover:text-zinc-300 transition-colors">
                           {post.title}
                         </h3>
-                        <p className="text-base text-zinc-400 line-clamp-2">
+                        <p className="text-sm sm:text-base text-zinc-400 line-clamp-2">
                           {post.excerpt}
                         </p>
                       </div>
-                      <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 group-hover:text-white group-hover:border-white/30 group-hover:bg-white/10 transition-all shrink-0 self-start sm:self-center">
-                        <ArrowRight size={20} className="group-hover:translate-x-0.5 transition-transform" />
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 group-hover:text-white group-hover:border-white/30 group-hover:bg-white/10 transition-all shrink-0 self-start sm:self-center">
+                        <ArrowRight size={18} className="group-hover:translate-x-0.5 transition-transform" />
                       </div>
                     </div>
                   </Link>
@@ -534,10 +530,10 @@ export default async function HomePage() {
               <div className="pt-2">
                 <Link
                   href="/blog"
-                  className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white/5 hover:bg-white hover:text-zinc-950 text-zinc-300 font-semibold text-sm sm:text-base transition-all duration-200 border border-white/10 hover:border-white group"
+                  className="inline-flex items-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white/5 hover:bg-white hover:text-zinc-950 text-zinc-300 font-semibold text-xs sm:text-base transition-all duration-200 border border-white/10 hover:border-white group"
                 >
                   Read All Articles 
-                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
             </section>
@@ -548,33 +544,33 @@ export default async function HomePage() {
         {/* 7. CONTACT / LET'S CONNECT SECTION */}
         {/* ======================================================= */}
         <ScrollReveal delay={0.1}>
-          <section id="contact" className="space-y-10 scroll-mt-28">
+          <section id="contact" className="space-y-8 sm:space-y-10 scroll-mt-24">
             <div className="space-y-1">
-              <h2 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white uppercase leading-none">
+              <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white uppercase leading-none break-words">
                 LET'S WORK
               </h2>
-              <h2 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-zinc-700 uppercase leading-none select-none">
+              <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-zinc-700 uppercase leading-none select-none break-words">
                 TOGETHER
               </h2>
             </div>
 
-            <div className="p-10 sm:p-14 rounded-3xl bg-zinc-900 border border-white/10 shadow-2xl space-y-8 relative overflow-hidden">
+            <div className="p-6 sm:p-10 md:p-14 rounded-3xl bg-zinc-900 border border-white/10 shadow-2xl space-y-6 sm:space-y-8 relative overflow-hidden">
               <div className="space-y-3">
-                <h3 className="text-3xl sm:text-4xl font-bold text-white">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
                   Have a project in mind or want to collaborate?
                 </h3>
-                <p className="text-zinc-400 text-base sm:text-lg leading-relaxed max-w-2xl">
+                <p className="text-zinc-400 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl">
                   Whether you're looking to build an AI product, full-stack application, or high-converting platform, let's create something extraordinary.
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2">
                 <MagneticButton>
                   <a
                     href={`mailto:${activeProfile.email}`}
-                    className="px-8 py-4 rounded-2xl bg-white text-zinc-950 font-bold text-sm sm:text-base flex items-center justify-center gap-2 hover:bg-zinc-200 transition-all duration-200 block"
+                    className="px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white text-zinc-950 font-bold text-xs sm:text-base flex items-center justify-center gap-2 hover:bg-zinc-200 transition-all duration-200 block shadow-lg"
                   >
-                    <Mail size={18} /> Send Direct Email
+                    <Mail size={16} /> Send Direct Email
                   </a>
                 </MagneticButton>
                 <MagneticButton>
@@ -582,9 +578,9 @@ export default async function HomePage() {
                     href={activeProfile.github || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-8 py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-semibold text-sm sm:text-base flex items-center justify-center gap-2 hover:bg-white/10 transition-all duration-200 block"
+                    className="px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-semibold text-xs sm:text-base flex items-center justify-center gap-2 hover:bg-white/10 transition-all duration-200 block"
                   >
-                    <GithubIcon size={18} /> View GitHub Repos
+                    <GithubIcon size={16} /> View GitHub Repos
                   </a>
                 </MagneticButton>
               </div>
@@ -593,7 +589,7 @@ export default async function HomePage() {
         </ScrollReveal>
 
         {/* Footer */}
-        <footer className="pt-14 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-zinc-500 font-mono">
+        <footer className="pt-10 sm:pt-14 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-zinc-500 font-mono text-center sm:text-left">
           <p>© {new Date().getFullYear()} {activeProfile.name}. All rights reserved.</p>
           <p className="text-zinc-600">Built with Next.js, Tailwind &amp; Framer Motion.</p>
         </footer>
