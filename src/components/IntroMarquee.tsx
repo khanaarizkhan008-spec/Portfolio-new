@@ -6,31 +6,19 @@ import { ArrowRight } from "lucide-react";
 
 export default function IntroMarquee({ onComplete }: { onComplete?: () => void }) {
   const [isVisible, setIsVisible] = useState(true);
-  const [progress, setProgress] = useState(0);
 
   const handleFinish = () => {
     setIsVisible(false);
     if (onComplete) {
-      setTimeout(onComplete, 600);
+      setTimeout(onComplete, 500);
     }
   };
 
   useEffect(() => {
-    // 3.5s smooth loader countdown
-    const duration = 3500;
-    const intervalTime = 35;
-    const increment = 100 / (duration / intervalTime);
-
-    const progressTimer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(progressTimer);
-          setTimeout(handleFinish, 300);
-          return 100;
-        }
-        return Math.min(prev + increment, 100);
-      });
-    }, intervalTime);
+    // 3.5s smooth auto-dismiss
+    const timer = setTimeout(() => {
+      handleFinish();
+    }, 3500);
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
@@ -41,7 +29,7 @@ export default function IntroMarquee({ onComplete }: { onComplete?: () => void }
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      clearInterval(progressTimer);
+      clearTimeout(timer);
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
@@ -143,18 +131,10 @@ export default function IntroMarquee({ onComplete }: { onComplete?: () => void }
 
           </div>
 
-          {/* Bottom Bar: Loading percentage & Progress Track */}
-          <div className="w-full space-y-3">
-            <div className="flex items-center justify-between text-xs font-mono text-zinc-400">
-              <span>LOADING EXPERIENCE</span>
-              <span className="font-bold text-white">{Math.round(progress)}%</span>
-            </div>
-            <div className="w-full h-1 bg-zinc-800 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-white transition-all duration-75 ease-out rounded-full"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
+          {/* Bottom Bar: Clean studio footer info */}
+          <div className="flex items-center justify-between text-xs font-mono text-zinc-500 uppercase tracking-wider">
+            <span>FULL-STACK &amp; AI BUILDER</span>
+            <span>PRESS ESC TO SKIP</span>
           </div>
 
         </motion.div>

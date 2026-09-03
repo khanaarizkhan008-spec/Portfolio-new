@@ -95,33 +95,19 @@ export default async function HomePage() {
         {/* 1. HERO SECTION (EXPANSIVE FULL SCREEN VIEWPORT) */}
         {/* ======================================================= */}
         <ScrollReveal>
-          <section id="hero" className="min-h-[82vh] flex flex-col justify-center space-y-10 pt-4">
+          <section id="hero" className="min-h-[80vh] flex flex-col justify-center space-y-10 pt-4">
             
-            {/* Top Bar: Large Avatar Thumbnail + Live Availability + Location */}
-            <div className="flex flex-wrap items-center justify-between gap-6 pb-4 border-b border-white/10">
-              <div className="flex items-center gap-4 sm:gap-5">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-3xl overflow-hidden bg-zinc-900 border-2 border-white/20 shrink-0 shadow-2xl">
-                  <img
-                    src={activeProfile.profileImage || "/avatar.jpg"}
-                    alt={activeProfile.name}
-                    className="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-mono font-semibold">
-                    <span className="relative flex h-2.5 w-2.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
-                    </span>
-                    <span>AVAILABLE FOR HIRE &amp; FREELANCE</span>
-                  </div>
-                  <p className="text-xs font-mono text-zinc-400 tracking-wider uppercase">
-                    DEVELOPER // 2026 EDITION
-                  </p>
-                </div>
+            {/* Live Availability Badge & Location */}
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-mono font-semibold">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+                </span>
+                <span>AVAILABLE FOR HIRE &amp; FREELANCE</span>
               </div>
 
-              <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-mono text-zinc-300 bg-zinc-900/90 px-4 py-2 rounded-xl border border-white/10">
+              <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-mono text-zinc-400 bg-zinc-900/90 px-4 py-2 rounded-xl border border-white/10">
                 <MapPin size={15} className="text-zinc-400" />
                 <span>India • Available Remote Worldwide</span>
               </div>
