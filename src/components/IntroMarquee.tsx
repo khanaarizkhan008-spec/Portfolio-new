@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 
 export default function IntroMarquee({ onComplete }: { onComplete?: () => void }) {
   const [isVisible, setIsVisible] = useState(true);
+  const [progress, setProgress] = useState(0);
 
   const handleFinish = () => {
     setIsVisible(false);
@@ -15,10 +16,21 @@ export default function IntroMarquee({ onComplete }: { onComplete?: () => void }
   };
 
   useEffect(() => {
-    // 3.5s smooth auto-dismiss
-    const timer = setTimeout(() => {
-      handleFinish();
-    }, 3500);
+    // 3.5s smooth loader
+    const duration = 3500;
+    const intervalTime = 35;
+    const increment = 100 / (duration / intervalTime);
+
+    const progressTimer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(progressTimer);
+          setTimeout(handleFinish, 300);
+          return 100;
+        }
+        return Math.min(prev + increment, 100);
+      });
+    }, intervalTime);
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
@@ -29,7 +41,7 @@ export default function IntroMarquee({ onComplete }: { onComplete?: () => void }
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      clearTimeout(timer);
+      clearInterval(progressTimer);
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
@@ -131,10 +143,18 @@ export default function IntroMarquee({ onComplete }: { onComplete?: () => void }
 
           </div>
 
-          {/* Bottom Bar: Clean studio footer info */}
-          <div className="flex items-center justify-between text-xs font-mono text-zinc-500 uppercase tracking-wider">
-            <span>FULL-STACK &amp; AI BUILDER</span>
-            <span>PRESS ESC TO SKIP</span>
+          {/* Bottom Bar: Loading Track (Without Percentage Numbers) */}
+          <div className="w-full space-y-2">
+            <div className="flex items-center justify-between text-xs font-mono text-zinc-500 uppercase tracking-wider">
+              <span>INITIALIZING PORTFOLIO</span>
+              <span>PRESS ESC TO SKIP</span>
+            </div>
+            <div className="w-full h-1 bg-zinc-800 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-white transition-all duration-75 ease-out rounded-full"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
           </div>
 
         </motion.div>
