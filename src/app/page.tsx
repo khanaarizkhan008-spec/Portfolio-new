@@ -19,6 +19,7 @@ import MagneticButton from "@/components/MagneticButton";
 import ScrollReveal from "@/components/ScrollReveal";
 import { GithubIcon, LinkedinIcon, TwitterIcon } from "@/components/SocialIcons";
 import IntroMarquee from "@/components/IntroMarquee";
+import ExperienceTimeline from "@/components/ExperienceTimeline";
 
 export const dynamic = "force-dynamic";
 
@@ -335,53 +336,20 @@ export default async function Home() {
         </ScrollReveal>
 
         {/* ======================================================= */}
-        {/* 4. WORK EXPERIENCE SECTION */}
+        {/* 4. WORK & STUDY EXPERIENCE TIMELINE */}
         {/* ======================================================= */}
         <ScrollReveal delay={0.1}>
           <section id="experience" className="space-y-8 sm:space-y-10 scroll-mt-24">
             <div className="space-y-1">
               <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white uppercase leading-none break-words">
-                WORK
+                WORK &amp;
               </h2>
               <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-zinc-700 uppercase leading-none select-none break-words">
-                EXPERIENCE
+                STUDY EXPERIENCE
               </h2>
             </div>
 
-            <div className="space-y-4">
-              {experiences.map((exp) => (
-                <div
-                  key={exp.id}
-                  className="p-6 sm:p-8 md:p-9 rounded-3xl bg-zinc-900/60 border border-white/10 hover:border-white/20 transition-all duration-300 space-y-3 sm:space-y-4"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3">
-                    <div>
-                      <h3 className="text-xl sm:text-2xl font-bold text-white">{exp.role}</h3>
-                      <p className="text-sm sm:text-base font-semibold text-zinc-400 font-mono">{exp.org}</p>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-xs sm:text-sm text-zinc-400 font-medium bg-white/5 px-3 sm:px-4 py-1.5 rounded-full w-fit border border-white/10 font-mono">
-                      <Calendar size={13} />
-                      {new Date(exp.startDate).toLocaleDateString("en-US", {
-                        month: "short",
-                        year: "numeric",
-                      })}{" "}
-                      —{" "}
-                      {exp.endDate
-                        ? new Date(exp.endDate).toLocaleDateString("en-US", {
-                            month: "short",
-                            year: "numeric",
-                          })
-                        : exp.ongoing
-                        ? "Present"
-                        : ""}
-                    </div>
-                  </div>
-                  <p className="text-sm sm:text-base text-zinc-400 leading-relaxed">
-                    {exp.description}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <ExperienceTimeline workExperiences={experiences} />
 
             {/* Certifications Sub-section */}
             {certifications.length > 0 && (
