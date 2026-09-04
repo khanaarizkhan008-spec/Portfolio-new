@@ -26,6 +26,7 @@ export async function updateProfile(formData: FormData) {
   });
 
   revalidatePath("/");
+  revalidatePath("/contact");
   revalidatePath("/admin/dashboard/profile");
   redirect("/admin/dashboard/profile");
 }

@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import { addSkill, deleteSkill } from "../actions/skills";
 import { Trash2, Plus, GripVertical } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function SkillsPage() {
   const skills = await prisma.skill.findMany({
     orderBy: { order: "asc" },

@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Comprehensive overview of technologies, frameworks, developer tools, and AI architectures.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function SkillsPage() {
   const skills = await prisma.skill.findMany({
     orderBy: { order: "asc" },

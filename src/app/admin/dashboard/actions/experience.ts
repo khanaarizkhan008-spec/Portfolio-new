@@ -27,6 +27,8 @@ export async function createExperience(formData: FormData) {
     },
   });
 
+  revalidatePath("/");
+  revalidatePath("/experience");
   revalidatePath("/admin/dashboard/experience");
 }
 
@@ -52,6 +54,8 @@ export async function updateExperience(id: string, formData: FormData) {
     },
   });
 
+  revalidatePath("/");
+  revalidatePath("/experience");
   revalidatePath("/admin/dashboard/experience");
 }
 
@@ -60,6 +64,8 @@ export async function deleteExperience(id: string) {
     where: { id },
   });
 
+  revalidatePath("/");
+  revalidatePath("/experience");
   revalidatePath("/admin/dashboard/experience");
 }
 
@@ -87,5 +93,7 @@ export async function moveExperience(id: string, direction: "up" | "down") {
     data: { order: currentOrder },
   });
 
+  revalidatePath("/");
+  revalidatePath("/experience");
   revalidatePath("/admin/dashboard/experience");
 }

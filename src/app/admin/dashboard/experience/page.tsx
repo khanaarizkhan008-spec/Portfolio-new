@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Trash2, Plus, ArrowUp, ArrowDown, Calendar } from "lucide-react";
 import { deleteExperience, moveExperience } from "../actions/experience";
 
+export const dynamic = "force-dynamic";
+
 export default async function ExperiencePage() {
   const experiences = await prisma.experience.findMany({
     orderBy: { order: "asc" },

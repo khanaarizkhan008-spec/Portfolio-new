@@ -23,6 +23,9 @@ export async function createPost(formData: FormData) {
     },
   });
 
+  revalidatePath("/");
+  revalidatePath("/blog");
+  revalidatePath(`/blog/${slug}`);
   revalidatePath("/admin/dashboard/posts");
   redirect("/admin/dashboard/posts");
 }
@@ -35,7 +38,7 @@ export async function updatePost(id: string, formData: FormData) {
   const coverImage = formData.get("coverImage") as string;
   const published = formData.get("published") === "on";
 
-  await prisma.post.update({
+  const post = await prisma.post.update({
     where: { id },
     data: {
       title,
@@ -47,13 +50,22 @@ export async function updatePost(id: string, formData: FormData) {
     },
   });
 
+  revalidatePath("/");
+  revalidatePath("/blog");
+  revalidatePath(`/blog/${post.slug}`);
   revalidatePath("/admin/dashboard/posts");
 }
 
 export async function deletePost(id: string) {
+  const post = await prisma.post.findUnique({ where: { id } });
   await prisma.post.delete({
     where: { id },
   });
 
+  revalidatePath("/");
+  revalidatePath("/blog");
+  if (post?.slug) {
+    revalidatePath(`/blog/${post.slug}`);
+  }
   revalidatePath("/admin/dashboard/posts");
 }

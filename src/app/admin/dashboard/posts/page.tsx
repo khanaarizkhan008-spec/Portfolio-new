@@ -3,6 +3,8 @@ import { createPost, updatePost, deletePost } from "../actions/posts";
 import Link from "next/link";
 import { Trash2, Plus, FileText } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function PostsPage() {
   const posts = await prisma.post.findMany({
     orderBy: { createdAt: "desc" },

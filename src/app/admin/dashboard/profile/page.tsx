@@ -11,6 +11,8 @@ import {
   Trophy,
 } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProfilePage() {
   const profile = await prisma.profile.findUnique({
     where: { id: "profile-1" },

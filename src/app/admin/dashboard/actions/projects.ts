@@ -27,6 +27,8 @@ export async function createProject(formData: FormData) {
     },
   });
 
+  revalidatePath("/");
+  revalidatePath("/projects");
   revalidatePath("/admin/dashboard/projects");
 }
 
@@ -52,6 +54,8 @@ export async function updateProject(id: string, formData: FormData) {
     },
   });
 
+  revalidatePath("/");
+  revalidatePath("/projects");
   revalidatePath("/admin/dashboard/projects");
 }
 
@@ -60,6 +64,8 @@ export async function deleteProject(id: string) {
     where: { id },
   });
 
+  revalidatePath("/");
+  revalidatePath("/projects");
   revalidatePath("/admin/dashboard/projects");
 }
 
@@ -87,5 +93,7 @@ export async function moveProject(id: string, direction: "up" | "down") {
     data: { order: currentOrder },
   });
 
+  revalidatePath("/");
+  revalidatePath("/projects");
   revalidatePath("/admin/dashboard/projects");
 }

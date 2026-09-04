@@ -35,7 +35,7 @@ const MONO_STACK_TAGS = ["Next.js", "React", "TypeScript", "Python", "AI / LLMs"
 export default function IntroProfileCard({ profile }: { profile: ProfileData }) {
   const [copied, setCopied] = useState(false);
 
-  const email = profile.email || "contact@rizz.dev";
+  const email = profile.email || "khanaarizkhan008@gmail.com";
   const location = profile.location || "India • UTC+5:30";
   const resumeUrl = profile.resumeUrl || "#contact";
 

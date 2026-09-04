@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Articles and insights on software engineering, AI systems, architecture, and building in public.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function BlogPage() {
   const posts = await prisma.post.findMany({
     where: { published: true },

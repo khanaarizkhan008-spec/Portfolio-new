@@ -78,7 +78,7 @@ export default async function Home() {
     github: "https://github.com/khanaarizkhan008-spec",
     linkedin: "https://linkedin.com/in/rizz-khan",
     twitter: "https://x.com/rizz-khan",
-    email: "contact@rizz.dev",
+    email: "khanaarizkhan008@gmail.com",
     yearsBuilding: 3,
     projectsShipped: 15,
     hackathonsEntered: 10,

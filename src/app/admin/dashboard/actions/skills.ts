@@ -17,6 +17,8 @@ export async function addSkill(formData: FormData) {
     },
   });
 
+  revalidatePath("/");
+  revalidatePath("/skills");
   revalidatePath("/admin/dashboard/skills");
 }
 
@@ -25,6 +27,8 @@ export async function deleteSkill(id: string) {
     where: { id },
   });
 
+  revalidatePath("/");
+  revalidatePath("/skills");
   revalidatePath("/admin/dashboard/skills");
 }
 
@@ -34,5 +38,7 @@ export async function updateSkillOrder(id: string, newOrder: number) {
     data: { order: newOrder },
   });
 
+  revalidatePath("/");
+  revalidatePath("/skills");
   revalidatePath("/admin/dashboard/skills");
 }

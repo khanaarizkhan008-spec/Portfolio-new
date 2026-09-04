@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: "Career timeline, study experience, hackathons, open source contributions, and engineering milestones.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ExperiencePage() {
   const experiences = await prisma.experience.findMany({
     orderBy: { order: "asc" },

@@ -128,7 +128,7 @@ export default function ContactForm({ email }: ContactFormProps) {
               <Sparkles size={20} className="text-zinc-400" />
             </h3>
             <p className="text-xs sm:text-sm text-zinc-400">
-              Fill in your details below and your inquiry will be delivered directly to my database and email.
+              Fill in your details below and your message will be forwarded directly to my inbox.
             </p>
           </div>
 

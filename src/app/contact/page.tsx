@@ -10,12 +10,14 @@ export const metadata: Metadata = {
   description: "Get in touch for projects, full-stack software development, AI integrations, or freelance work.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ContactPage() {
   const profile = await prisma.profile.findUnique({
     where: { id: "profile-1" },
   });
 
-  const email = profile?.email || "contact@rizz.dev";
+  const email = profile?.email || "khanaarizkhan008@gmail.com";
 
   return (
     <main className="min-h-screen bg-[#09090b] text-zinc-100 pt-20 sm:pt-28 pb-24 selection:bg-white/20 selection:text-white overflow-x-hidden">

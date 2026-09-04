@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: "Explore all featured work, full-stack applications, AI tools, and open source projects.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ProjectsPage() {
   const projects = await prisma.project.findMany({
     orderBy: [{ featured: "desc" }, { order: "asc" }],

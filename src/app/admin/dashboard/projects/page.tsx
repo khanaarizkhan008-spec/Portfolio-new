@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Trash2, Plus, ArrowUp, ArrowDown, ExternalLink } from "lucide-react";
 import { deleteProject, moveProject } from "../actions/projects";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProjectsPage() {
   const projects = await prisma.project.findMany({
     orderBy: { order: "asc" },
