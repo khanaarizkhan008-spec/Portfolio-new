@@ -17,53 +17,74 @@ export async function POST(request: NextRequest) {
     const timestamp = new Date().toISOString();
 
     if (webhookUrl) {
-      // Check if Discord webhook
-      if (webhookUrl.includes("discord.com/api/webhooks")) {
-        await fetch(webhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            username: "Portfolio Contact Bot",
-            embeds: [
-              {
-                title: "📬 New Portfolio Inquiry",
-                color: 0x10b981, // Emerald green
-                fields: [
-                  { name: "Sender Name", value: name, inline: true },
-                  { name: "Sender Email", value: email, inline: true },
-                  { name: "Recipient", value: recipientEmail, inline: false },
-                  { name: "Message", value: message, inline: false },
-                ],
-                footer: { text: `Submitted at ${new Date().toLocaleString()}` },
-              },
-            ],
-          }),
-        });
-      } else if (webhookUrl.includes("hooks.slack.com")) {
-        // Slack webhook format
-        await fetch(webhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            text: `*New Contact Message from ${name} (${email})*\n>${message}`,
-          }),
-        });
-      } else {
-        // Standard JSON payload for Zapier, Make, Formspree, n8n, custom server, etc.
-        await fetch(webhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name,
-            email,
-            message,
-            recipient: recipientEmail,
-            submittedAt: timestamp,
-          }),
-        });
+      try {
+        let response;
+        // Check if Discord webhook
+        if (webhookUrl.includes("discord.com/api/webhooks")) {
+          response = await fetch(webhookUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              username: "Portfolio Contact Bot",
+              embeds: [
+                {
+                  title: "📬 New Portfolio Inquiry",
+                  color: 0x10b981, // Emerald green
+                  fields: [
+                    { name: "Sender Name", value: name, inline: true },
+                    { name: "Sender Email", value: email, inline: true },
+                    { name: "Recipient", value: recipientEmail, inline: false },
+                    { name: "Message", value: message, inline: false },
+                  ],
+                  footer: { text: `Submitted at ${new Date().toLocaleString()}` },
+                },
+              ],
+            }),
+          });
+        } else if (webhookUrl.includes("hooks.slack.com")) {
+          // Slack webhook format
+          response = await fetch(webhookUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              text: `*New Contact Message from ${name} (${email})*\n>${message}`,
+            }),
+          });
+        } else {
+          // Standard JSON payload for Zapier, Make, Formspree, n8n, custom server, etc.
+          response = await fetch(webhookUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name,
+              email,
+              message,
+              recipient: recipientEmail,
+              submittedAt: timestamp,
+            }),
+          });
+        }
+        console.log(`[Contact Webhook] Status: ${response.status} ${response.statusText}`);
+      } catch (webhookError) {
+        console.error("[Contact Webhook] Request failed:", webhookError);
       }
     } else {
       console.log(`[Contact Webhook] No CONTACT_WEBHOOK_URL configured. Message from ${name} (${email}): ${message}`);
+    }
+
+    // Save to the database for the admin dashboard inbox
+    try {
+      const { prisma } = await import("@/lib/prisma");
+      await prisma.contactMessage.create({
+        data: {
+          name,
+          email,
+          message,
+        },
+      });
+      console.log(`[Contact Message] Saved to database from ${email}`);
+    } catch (dbError) {
+      console.error("[Contact Message] Database save failed:", dbError);
     }
 
     return NextResponse.json(
