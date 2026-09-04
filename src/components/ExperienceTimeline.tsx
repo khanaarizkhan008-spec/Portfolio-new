@@ -19,59 +19,44 @@ export interface TimelineItem {
 }
 
 interface ExperienceTimelineProps {
-  workExperiences: any[];
+  experiences?: any[];
+  workExperiences?: any[]; // backwards compatibility
 }
 
-export default function ExperienceTimeline({ workExperiences }: ExperienceTimelineProps) {
+export default function ExperienceTimeline({ experiences, workExperiences }: ExperienceTimelineProps) {
   const [activeTab, setActiveTab] = useState<"all" | "work" | "education">("all");
 
-  // Format database experiences as work type
-  const formattedWork: TimelineItem[] = workExperiences.map((exp) => ({
-    id: exp.id,
-    type: "work" as const,
-    org: exp.org,
-    role: exp.role,
-    description: exp.description,
-    startDate: exp.startDate,
-    endDate: exp.endDate,
-    ongoing: exp.ongoing,
-    url: exp.url,
-  }));
+  const rawList = experiences || workExperiences || [];
 
-  // Study & Education experiences
-  const educationExperiences: TimelineItem[] = [
-    {
-      id: "edu-1",
-      type: "education",
-      org: "Bachelor of Technology (B.Tech)",
-      role: "Computer Science & Engineering",
-      description: "Focused on Autonomous AI Systems, High-Performance Distributed Systems, Data Structures & Algorithms, and Cloud Infrastructure. Actively leading developer communities and winning national collegiate hackathons.",
-      startDate: new Date("2022-08-01"),
-      endDate: null,
-      ongoing: true,
-      location: "India",
-      skills: ["Data Structures", "Algorithms", "Operating Systems", "AI & ML", "Web Architecture"],
-    },
-    {
-      id: "edu-2",
-      type: "education",
-      org: "Senior Secondary Education (XII)",
-      role: "Physics, Chemistry & Mathematics (PCM) + CS",
-      description: "Graduated with distinction in Science and Computer Science with specialization in Python, Database Systems, and Object-Oriented Programming principles.",
-      startDate: new Date("2020-04-01"),
-      endDate: new Date("2022-05-01"),
-      ongoing: false,
-      location: "India",
-      skills: ["Mathematics", "Physics", "Computer Science", "Python"],
-    },
-  ];
+  const allItems: TimelineItem[] = rawList.map((exp) => {
+    let parsedSkills: string[] | undefined = undefined;
+    if (Array.isArray(exp.skills)) {
+      parsedSkills = exp.skills;
+    } else if (typeof exp.skills === "string" && exp.skills.trim()) {
+      parsedSkills = exp.skills.split(",").map((s: string) => s.trim()).filter(Boolean);
+    }
 
-  // Combine and sort chronologically (most recent first)
-  const allItems: TimelineItem[] = [...formattedWork, ...educationExperiences].sort((a, b) => {
+    return {
+      id: exp.id,
+      type: (exp.type === "education" ? "education" : "work") as "work" | "education",
+      org: exp.org,
+      role: exp.role,
+      description: exp.description,
+      startDate: exp.startDate,
+      endDate: exp.endDate,
+      ongoing: exp.ongoing,
+      url: exp.url,
+      location: exp.location,
+      skills: parsedSkills,
+    };
+  }).sort((a, b) => {
     const dateA = new Date(a.startDate).getTime();
     const dateB = new Date(b.startDate).getTime();
     return dateB - dateA;
   });
+
+  const workItems = allItems.filter((item) => item.type === "work");
+  const educationItems = allItems.filter((item) => item.type === "education");
 
   const filteredItems = allItems.filter((item) => {
     if (activeTab === "all") return true;
@@ -104,7 +89,7 @@ export default function ExperienceTimeline({ workExperiences }: ExperienceTimeli
           }`}
         >
           <Briefcase size={13} />
-          <span>Work Experience ({formattedWork.length})</span>
+          <span>Work Experience ({workItems.length})</span>
         </button>
 
         <button
@@ -116,7 +101,7 @@ export default function ExperienceTimeline({ workExperiences }: ExperienceTimeli
           }`}
         >
           <GraduationCap size={14} />
-          <span>Study &amp; Education ({educationExperiences.length})</span>
+          <span>Study &amp; Education ({educationItems.length})</span>
         </button>
       </div>
 

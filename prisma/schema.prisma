@@ -34,13 +34,16 @@ model Project {
 
 model Experience {
   id          String    @id @default(cuid())
+  type        String    @default("work") // "work" | "education"
   org         String    // organization / event / institution name
-  role        String    // role or context (e.g. "Hackathon Participant")
+  role        String    // role or context (e.g. "Hackathon Participant", "Degree")
   description String
   startDate   DateTime
   endDate     DateTime?
   ongoing     Boolean   @default(false)
   url         String?
+  location    String?
+  skills      String?   // comma-separated tags
   order       Int       @default(0)
 }
 
@@ -70,6 +73,9 @@ model Profile {
   linkedin          String?
   twitter           String?
   email             String?
+  location          String? @default("India • Available Worldwide")
+  availability      String? @default("AVAILABLE FOR HIRE & FREELANCE")
+  resumeUrl         String?
   yearsBuilding     Int     @default(0)
   projectsShipped   Int     @default(0)
   hackathonsEntered Int     @default(0)

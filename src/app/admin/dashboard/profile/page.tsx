@@ -140,6 +140,43 @@ export default async function ProfilePage() {
                 <input 
                   name="profileImage" 
                   defaultValue={profile.profileImage || ""} 
+                  placeholder="https://... or /avatar.jpg"
+                  className="w-full px-4 py-2 rounded-lg bg-[#111] border border-white/10 text-white outline-none focus:border-amber-500 transition-all"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm text-gray-400 block">
+                  Location Display (Hero &amp; Badges)
+                </label>
+                <input 
+                  name="location" 
+                  defaultValue={profile.location || "India • Available Worldwide"} 
+                  placeholder="e.g. India • Available Worldwide"
+                  className="w-full px-4 py-2 rounded-lg bg-[#111] border border-white/10 text-white outline-none focus:border-amber-500 transition-all"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm text-gray-400 block">
+                  Availability Status Badge
+                </label>
+                <input 
+                  name="availability" 
+                  defaultValue={profile.availability || "AVAILABLE FOR HIRE & FREELANCE"} 
+                  placeholder="e.g. AVAILABLE FOR HIRE & FREELANCE"
+                  className="w-full px-4 py-2 rounded-lg bg-[#111] border border-white/10 text-white outline-none focus:border-amber-500 transition-all"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm text-gray-400 block">
+                  Resume / CV Link (URL)
+                </label>
+                <input 
+                  name="resumeUrl" 
+                  defaultValue={profile.resumeUrl || ""} 
+                  placeholder="e.g. https://drive.google.com/... or /resume.pdf"
                   className="w-full px-4 py-2 rounded-lg bg-[#111] border border-white/10 text-white outline-none focus:border-amber-500 transition-all"
                 />
               </div>

@@ -31,25 +31,59 @@ export default async function EditExperiencePage({ params }: { params: Promise<{
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-6">
-            <h3 className="text-lg font-medium text-amber-500 border-b border-white/10 pb-2">Organization</h3>
+            <h3 className="text-lg font-medium text-amber-500 border-b border-white/10 pb-2">Entry Details</h3>
             
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm text-gray-400 block">Organization / Institution Name</label>
+                <label className="text-sm text-gray-400 block">Entry Type</label>
+                <select 
+                  name="type" 
+                  defaultValue={exp.type || "work"} 
+                  className="w-full px-4 py-2 rounded-lg bg-[#111] border border-white/10 text-white outline-none focus:border-amber-500 transition-all cursor-pointer"
+                >
+                  <option value="work">Work Experience</option>
+                  <option value="education">Education & Study</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm text-gray-400 block">Organization / School / Institution</label>
                 <input 
                   name="org" 
                   required 
                   defaultValue={exp.org} 
+                  placeholder="e.g. Google / Stanford University"
                   className="w-full px-4 py-2 rounded-lg bg-[#111] border border-white/10 text-white outline-none focus:border-amber-500 transition-all"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm text-gray-400 block">Role / Context</label>
+                <label className="text-sm text-gray-400 block">Role / Degree / Context</label>
                 <input 
                   name="role" 
                   required 
                   defaultValue={exp.role} 
+                  placeholder="e.g. Senior Software Engineer / B.Tech Computer Science"
+                  className="w-full px-4 py-2 rounded-lg bg-[#111] border border-white/10 text-white outline-none focus:border-amber-500 transition-all"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm text-gray-400 block">Location (Optional)</label>
+                <input 
+                  name="location" 
+                  defaultValue={exp.location || ""} 
+                  placeholder="e.g. San Francisco, CA / India / Remote"
+                  className="w-full px-4 py-2 rounded-lg bg-[#111] border border-white/10 text-white outline-none focus:border-amber-500 transition-all"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm text-gray-400 block">Skills / Focus Areas (comma-separated tags)</label>
+                <input 
+                  name="skills" 
+                  defaultValue={exp.skills || ""} 
+                  placeholder="e.g. Distributed Systems, Next.js, AI, Algorithms"
                   className="w-full px-4 py-2 rounded-lg bg-[#111] border border-white/10 text-white outline-none focus:border-amber-500 transition-all"
                 />
               </div>
@@ -59,7 +93,7 @@ export default async function EditExperiencePage({ params }: { params: Promise<{
                 <textarea 
                   name="description" 
                   required 
-                  rows={6}
+                  rows={5}
                   defaultValue={exp.description} 
                   className="w-full px-4 py-2 rounded-lg bg-[#111] border border-white/10 text-white outline-none focus:border-amber-500 transition-all resize-none"
                 />

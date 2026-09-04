@@ -4,7 +4,13 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-export default function IntroMarquee({ onComplete }: { onComplete?: () => void }) {
+interface IntroMarqueeProps {
+  onComplete?: () => void;
+  name?: string;
+  role?: string;
+}
+
+export default function IntroMarquee({ onComplete, name, role }: IntroMarqueeProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [progress, setProgress] = useState(0);
 
@@ -46,12 +52,15 @@ export default function IntroMarquee({ onComplete }: { onComplete?: () => void }
     };
   }, []);
 
+  const displayName = (name || "MOHAMMAD AARIZ KHAN").toUpperCase();
+  const displayRole = (role || "FULL-STACK SOFTWARE ENGINEER & AI BUILDER").toUpperCase();
+
   const items = [
-    "MOHAMMAD AARIZ KHAN",
-    "FULL-STACK SOFTWARE ENGINEER",
+    displayName,
+    displayRole,
     "CREATIVE AI DEVELOPER",
     "NEXT.JS & TYPESCRIPT",
-    "MOHAMMAD AARIZ KHAN"
+    displayName
   ];
 
   return (

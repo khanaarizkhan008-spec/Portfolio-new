@@ -22,6 +22,7 @@ import IntroMarquee from "@/components/IntroMarquee";
 import ExperienceTimeline from "@/components/ExperienceTimeline";
 import ContactForm from "@/components/ContactForm";
 import { FileText } from "lucide-react";
+import RollingNumber from "@/components/RollingNumber";
 
 export const dynamic = "force-dynamic";
 
@@ -79,14 +80,21 @@ export default async function Home() {
     linkedin: "https://linkedin.com/in/rizz-khan",
     twitter: "https://x.com/rizz-khan",
     email: "khanaarizkhan008@gmail.com",
+    location: "India • Available Worldwide",
+    availability: "AVAILABLE FOR HIRE & FREELANCE",
+    resumeUrl: "",
     yearsBuilding: 3,
     projectsShipped: 15,
     hackathonsEntered: 10,
   };
 
+  const nameParts = (activeProfile.name || "Mohammad Aariz Khan").trim().split(" ");
+  const firstName = nameParts[0] || "Mohammad";
+  const lastName = nameParts.slice(1).join(" ") || "Aariz Khan";
+
   return (
     <>
-      <IntroMarquee />
+      <IntroMarquee name={activeProfile.name} role={activeProfile.role} />
       <main className="min-h-screen bg-[#09090b] text-zinc-100 pt-20 sm:pt-28 pb-24 selection:bg-white/20 selection:text-white overflow-x-hidden">
         <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-16 space-y-24 sm:space-y-32 lg:space-y-40">
         
@@ -103,22 +111,22 @@ export default async function Home() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
                 </span>
-                <span className="truncate">AVAILABLE FOR HIRE &amp; FREELANCE</span>
+                <span className="truncate">{activeProfile.availability || "AVAILABLE FOR HIRE & FREELANCE"}</span>
               </div>
 
               <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-mono text-zinc-400 bg-zinc-900/90 px-3.5 py-1.5 rounded-xl border border-white/10">
                 <MapPin size={14} className="text-zinc-400 shrink-0" />
-                <span className="truncate">India • Available Worldwide</span>
+                <span className="truncate">{activeProfile.location || "India • Available Worldwide"}</span>
               </div>
             </div>
 
             {/* Massive Responsive Two-Tone Typography */}
             <div className="space-y-0.5 sm:space-y-1">
               <h1 className="text-4xl xs:text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[11.5rem] font-black tracking-tight text-white uppercase leading-[0.9] break-words">
-                MOHAMMAD
+                {firstName}
               </h1>
               <h1 className="text-4xl xs:text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[11.5rem] font-black tracking-tight text-zinc-700 uppercase leading-[0.9] select-none break-words">
-                AARIZ KHAN
+                {lastName}
               </h1>
             </div>
 
@@ -151,7 +159,9 @@ export default async function Home() {
               </a>
 
               <a
-                href={`mailto:${activeProfile.email}?subject=Resume%20Request%20-%20Mohammad%20Aariz%20Khan`}
+                href={activeProfile.resumeUrl || `mailto:${activeProfile.email}?subject=Resume%20Request%20-%20${encodeURIComponent(activeProfile.name)}`}
+                target={activeProfile.resumeUrl ? "_blank" : undefined}
+                rel={activeProfile.resumeUrl ? "noopener noreferrer" : undefined}
                 className="px-5 sm:px-6 py-3.5 sm:py-4 rounded-2xl bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white font-mono font-bold text-xs sm:text-sm tracking-wider uppercase border border-white/10 transition-all duration-200 flex items-center justify-center gap-2"
               >
                 <FileText size={15} />
@@ -217,7 +227,7 @@ export default async function Home() {
             <div className="grid grid-cols-3 gap-2 sm:gap-6 pt-6 sm:pt-10 border-t border-white/10">
               <div className="space-y-0.5 sm:space-y-1">
                 <p className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight">
-                  +{activeProfile.yearsBuilding}
+                  +<RollingNumber value={activeProfile.yearsBuilding || 0} />
                 </p>
                 <p className="text-[9px] xs:text-[11px] sm:text-sm font-semibold tracking-wider text-zinc-500 uppercase font-mono truncate">
                   YEARS BUILDING
@@ -225,7 +235,7 @@ export default async function Home() {
               </div>
               <div className="space-y-0.5 sm:space-y-1">
                 <p className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight">
-                  +{activeProfile.projectsShipped}
+                  +<RollingNumber value={activeProfile.projectsShipped || 0} />
                 </p>
                 <p className="text-[9px] xs:text-[11px] sm:text-sm font-semibold tracking-wider text-zinc-500 uppercase font-mono truncate">
                   PROJECTS SHIPPED
@@ -233,7 +243,7 @@ export default async function Home() {
               </div>
               <div className="space-y-0.5 sm:space-y-1">
                 <p className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight">
-                  +{activeProfile.hackathonsEntered > 0 ? activeProfile.hackathonsEntered : 10}
+                  +<RollingNumber value={activeProfile.hackathonsEntered > 0 ? activeProfile.hackathonsEntered : 10} />
                 </p>
                 <p className="text-[9px] xs:text-[11px] sm:text-sm font-semibold tracking-wider text-zinc-500 uppercase font-mono truncate">
                   HACKATHONS &amp; AWARDS

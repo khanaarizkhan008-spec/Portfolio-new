@@ -8,6 +8,9 @@ import {
   Briefcase, 
   User, 
   Wrench, 
+  Award,
+  Mail,
+  GraduationCap,
   LogOut 
 } from "lucide-react";
 import { signOut } from "next-auth/react";
@@ -16,8 +19,10 @@ const navItems = [
   { name: "Overview", href: "/admin/dashboard", icon: LayoutDashboard },
   { name: "Blog Posts", href: "/admin/dashboard/posts", icon: FileText },
   { name: "Projects", href: "/admin/dashboard/projects", icon: Briefcase },
-  { name: "Experience", href: "/admin/dashboard/experience", icon: Briefcase },
+  { name: "Experience & Study", href: "/admin/dashboard/experience", icon: GraduationCap },
+  { name: "Certifications", href: "/admin/dashboard/certifications", icon: Award },
   { name: "Skills", href: "/admin/dashboard/skills", icon: Wrench },
+  { name: "Inquiries", href: "/admin/dashboard/messages", icon: Mail },
   { name: "Profile", href: "/admin/dashboard/profile", icon: User },
 ];
 
