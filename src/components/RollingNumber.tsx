@@ -11,8 +11,8 @@ export default function RollingNumber({ value }: RollingNumberProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(0);
   const springValue = useSpring(motionValue, {
-    damping: 50,
-    stiffness: 100,
+    damping: 20,
+    stiffness: 250,
   });
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
